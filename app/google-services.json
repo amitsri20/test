@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "635279310624",
+    "firebase_url": "https://helpplusapp-318b8.firebaseio.com",
+    "project_id": "helpplusapp-318b8",
+    "storage_bucket": "helpplusapp-318b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635279310624:android:3b2744ad9becfd2d",
+        "android_client_info": {
+          "package_name": "com.helpplusapp.amit.helpplus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635279310624-lggpnih0j3r53u1jb03vliths4rjpjpu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.helpplusapp.amit.helpplus",
+            "certificate_hash": "3D86CF872BBE3A69F14069719C3D1DDFC6C43920"
+          }
+        },
+        {
+          "client_id": "635279310624-12eq5s4frmcmurrhe1ds491e71lp7l3p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzLpaE5TjjN9OEN9Nc9j9Jygw-jHNvJqg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635279310624-12eq5s4frmcmurrhe1ds491e71lp7l3p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
