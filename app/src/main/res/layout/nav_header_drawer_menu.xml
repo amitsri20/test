@@ -14,11 +14,11 @@
     <ImageView
         android:id="@+id/nav_header_image"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:scaleType="center"
-        android:maxHeight="200dp"
-        android:maxWidth="200dp"
+        android:scaleType="fitCenter"
+        android:maxHeight="100dp"
+        android:maxWidth="100dp"
         android:src="@android:drawable/sym_def_app_icon" />
 
     <TextView

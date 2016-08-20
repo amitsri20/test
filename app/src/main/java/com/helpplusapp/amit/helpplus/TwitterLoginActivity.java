@@ -27,8 +27,7 @@ import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import io.fabric.sdk.android.Fabric;
 
-public class TwitterLoginActivity extends BaseActivity
-        implements View.OnClickListener {
+public class TwitterLoginActivity extends BaseActivity {
 
     private static final String TAG = "TwitterLogin";
 
@@ -61,7 +60,7 @@ public class TwitterLoginActivity extends BaseActivity
         // Views
         mStatusTextView = (TextView) findViewById(R.id.status);
         mDetailTextView = (TextView) findViewById(R.id.detail);
-        findViewById(R.id.button_twitter_signout).setOnClickListener(this);
+//        findViewById(R.id.button_twitter_signout).setOnClickListener(this);
 
         // [START initialize_auth]
         // Initialize Firebase Auth
@@ -184,24 +183,16 @@ public class TwitterLoginActivity extends BaseActivity
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
             findViewById(R.id.button_twitter_login).setVisibility(View.GONE);
-            findViewById(R.id.button_twitter_signout).setVisibility(View.VISIBLE);
+//            findViewById(R.id.button_twitter_signout).setVisibility(View.VISIBLE);
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
 
             findViewById(R.id.button_twitter_login).setVisibility(View.VISIBLE);
-            findViewById(R.id.button_twitter_signout).setVisibility(View.GONE);
+//            findViewById(R.id.button_twitter_signout).setVisibility(View.GONE);
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_twitter_signout:
-                signOut();
-                break;
-        }
-    }
     @Override
     public void onBackPressed() {
 
