@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_tag_text">Add new tag</string>
+    <string name="addtag_title_text">Add tag</string>
+    <string name="tags_input_hint">type tag name</string>
+    <string name="input_prefill" />
+</resources>

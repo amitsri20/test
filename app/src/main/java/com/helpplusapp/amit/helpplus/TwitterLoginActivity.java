@@ -19,9 +19,11 @@ import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -51,7 +53,7 @@ public class TwitterLoginActivity extends BaseActivity
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(
                 getString(R.string.twitter_consumer_key),
                 getString(R.string.twitter_consumer_secret));
-        Fabric.with(this, new Twitter(authConfig));
+        Fabric.with(this, new Twitter(authConfig),new TwitterCore(authConfig), new TweetComposer());
 
         // Inflate layout (must be done after Twitter is configured)
         setContentView(R.layout.activity_twitter);
@@ -80,7 +82,7 @@ public class TwitterLoginActivity extends BaseActivity
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
                 // [START_EXCLUDE]
-                updateUI(user);
+//                updateUI(user);
                 // [END_EXCLUDE]
             }
         };
@@ -157,6 +159,7 @@ public class TwitterLoginActivity extends BaseActivity
                         }
                         else {
                             startActivity(new Intent(getApplicationContext(),DrawerMenuActivity.class));
+                            finish();
                         }
 
                         // [START_EXCLUDE]
@@ -198,5 +201,10 @@ public class TwitterLoginActivity extends BaseActivity
                 signOut();
                 break;
         }
+    }
+    @Override
+    public void onBackPressed() {
+
+        moveTaskToBack(true);
     }
 }

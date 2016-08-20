@@ -50,7 +50,7 @@
 
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
-    <string name="title_activity_drawer_menu">DrawerMenuActivity</string>
+    <string name="title_activity_drawer_menu">HelpPlus</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -60,4 +60,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_posts_fragment">Posts will go here</string>
+    <string name="add_tag_text">Add new tag</string>
+    <string name="addtag_title_text">Add tag/scree name</string>
+    <string name="tags_input_hint">type tag name</string>
+    <string name="input_prefill">#</string>
+    <string name="action_addtag">Add Tag</string>
+    <string name="action_addHomeContent">Add Notification</string>
+    <string name="add_home_content_title_text">Create sample home content</string>
+    <string name="home_content_input_prefill" />
+    <string name="home_content_input_hint">Write content here</string>
+    <string name="widget_title">HelpPlus</string>
 </resources>

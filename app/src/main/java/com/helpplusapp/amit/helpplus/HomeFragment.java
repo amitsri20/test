@@ -1,108 +1,228 @@
 package com.helpplusapp.amit.helpplus;
 
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.firebase.client.Firebase;
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.helpplusapp.amit.helpplus.model.HomeSampleContent;
+import com.helpplusapp.amit.helpplus.model.Tags;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.HashMap;
+
 public class HomeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private DatabaseReference mFirebaseDatabaseReference;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+    public ProgressBar mProgressBar;
+    private RecyclerView mHomeNotifRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
+    FirebaseListAdapter<HomeSampleContent> adapter;
 
-    private OnFragmentInteractionListener mListener;
-
+//    public static class HomeNotifViewHolder extends RecyclerView.ViewHolder {
+//        public TextView homeNotifTextView;
+//        public TextView homeNotifTimeCreatedTextView;
+//
+//
+//        public HomeNotifViewHolder(View v) {
+//            super(v);
+//            homeNotifTextView = (TextView) itemView.findViewById(R.id.notifTextView);
+//            homeNotifTimeCreatedTextView = (TextView) itemView.findViewById(R.id.notifTimeCreatedTextView);
+//        }
+//    }
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        setHasOptionsMenu(true);
+
+        Firebase.setAndroidContext(getContext());
+        // Initialize Firebase Auth
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+        mProgressBar = (ProgressBar)view.findViewById(R.id.progressBar);
 
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+        SwipeMenuListView homelist = (SwipeMenuListView)view.findViewById(R.id.home_listview);
+        mFirebaseDatabaseReference.child("HomeContent");
+//        Firebase ref = new Firebase("https://helpplusapp-318b8.firebaseio.com/HomeContent");
+        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("HomeContent");
+        adapter = new FirebaseListAdapter<HomeSampleContent>(getActivity(), HomeSampleContent.class, R.layout.item_home_message, mDatabaseReference)
+        {
+
+            @Override
+            protected void populateView(View v, HomeSampleContent model, int position) {
+                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    ((TextView) v.findViewById(R.id.notifTextView)).setText(model.getHomeNotificationText());
+//                    ((TextView) v.findViewById(R.id.notifTimeCreatedTextView)).setText(model.getTimestampCreated().toString());
+
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return super.getItemViewType(position);
+            }
+        };
+        homelist.setAdapter(adapter);
+
+        //Swipe to action code
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "open" item
+                SwipeMenuItem openItem = new SwipeMenuItem(
+                        getContext());
+                // set item background
+                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+                        0xCE)));
+                // set item width
+                openItem.setWidth(dp2px(90));
+                // set item title
+                openItem.setTitle("Take action");
+                // set item title fontsize
+                openItem.setTitleSize(18);
+                // set item title font color
+                openItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(openItem);
+
+            }
+        };
+
+// set creator
+        homelist.setMenuCreator(creator);
+
+        homelist.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0: {
+                        // Decide which action to take
+                        HomeSampleContent homeSampleContent = adapter.getItem(position);
+                        if (homeSampleContent.getActionType().equals("addScreenName")) {
+                            String UId = mFirebaseUser.getUid();
+                            HashMap<String, Object> timestampCreated = new HashMap<>();
+                            timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
+                            Tags tags = new Tags(UId, homeSampleContent.getHomeContent(), timestampCreated);
+                            mFirebaseDatabaseReference.child("tags").push().setValue(tags);
+                            Toast.makeText(getContext(),homeSampleContent.getHomeContent(),Toast.LENGTH_SHORT).show();
+                        }
+
+                        break;
+                    }
+                    default:
+                        Toast.makeText(getContext(),"Action cannot be completed!",Toast.LENGTH_SHORT).show();
+                }
+                // false : close the menu; true : not close the menu
+                return false;
+            }
+        });
+
+        // set SwipeListener
+        homelist.setOnSwipeListener(new SwipeMenuListView.OnSwipeListener() {
+
+            @Override
+            public void onSwipeStart(int position) {
+                // swipe start
+            }
+
+            @Override
+            public void onSwipeEnd(int position) {
+                // swipe end
+            }
+        });
+
+        // set MenuStateChangeListener
+        homelist.setOnMenuStateChangeListener(new SwipeMenuListView.OnMenuStateChangeListener() {
+            @Override
+            public void onMenuOpen(int position) {
+            }
+
+            @Override
+            public void onMenuClose(int position) {
+            }
+        });
+
+        return view;
+    }
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_sample_home_content, menu);
     }
-
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.action_add_home_content)
+        {
+            new MaterialDialog.Builder(getContext())
+                    .title(R.string.add_home_content_title_text)
+                    .content("Home Content")
+                    .inputType(InputType.TYPE_CLASS_TEXT )
+                    .inputRangeRes(5, 160, R.color.tw__composer_red)
+                    .input(R.string.home_content_input_hint, R.string.home_content_input_prefill, new MaterialDialog.InputCallback() {
+                        @Override
+                        public void onInput(MaterialDialog dialog, CharSequence input) {
+//                            String UId = mFirebaseUser.getUid();
+                            HashMap<String, Object> timestampCreated = new HashMap<>();
+                            timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
+//                            String time = ServerValue.TIMESTAMP;
+                            HomeSampleContent homeContent = new HomeSampleContent(input.toString(),input.toString(),"addScreenName",timestampCreated);
+                            mFirebaseDatabaseReference.child("HomeContent").push().setValue(homeContent);
+                        }
+                    }).show();
+        }
+        return  true;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
     }
 }

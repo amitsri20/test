@@ -2,12 +2,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.helpplusapp.amit.helpplus.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--<TextView android:id="@id/android:empty"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center_horizontal|center_vertical"-->
+        <!--android:text="Home content will go here!"/>-->
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center"
+        />
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/homenotifRecyclerView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--/>-->
+    <com.baoyz.swipemenulistview.SwipeMenuListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/home_listview">
 
+    </com.baoyz.swipemenulistview.SwipeMenuListView>
 </FrameLayout>

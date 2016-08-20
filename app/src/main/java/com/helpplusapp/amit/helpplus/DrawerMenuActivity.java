@@ -1,31 +1,58 @@
 package com.helpplusapp.amit.helpplus;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+
+import io.fabric.sdk.android.Fabric;
 
 public class DrawerMenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,PostsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,PostsFragment.OnFragmentInteractionListener
+         {
 
     private FirebaseAuth mAuth;
+    TextView header_primary_text;
+    ImageView headerImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Firebase persistance
+        Firebase.setAndroidContext(this);
+        /* Enable disk persistence  */
+        Firebase.getDefaultConfig().setPersistenceEnabled(true);
+
         setContentView(R.layout.activity_drawer_menu);
+
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig(
+                getString(R.string.twitter_consumer_key),
+                getString(R.string.twitter_consumer_secret));
+        Fabric.with(this, new Twitter(authConfig),new TwitterCore(authConfig), new TweetComposer());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -34,8 +61,14 @@ public class DrawerMenuActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                final TwitterSession session = TwitterCore.getInstance().getSessionManager()
+                        .getActiveSession();
+                TweetComposer.Builder builder = new TweetComposer.Builder(DrawerMenuActivity.this)
+                        .text("#heplplus");
+
+                builder.show();
             }
         });
 
@@ -48,12 +81,21 @@ public class DrawerMenuActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        Toast.makeText(this,user.getUid(),Toast.LENGTH_SHORT).show();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+//        Toast.makeText(this,user.getDisplayName(),Toast.LENGTH_SHORT).show();
 
-        HomeFragment homeFragment =  ((HomeFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_home));
+        View header=navigationView.getHeaderView(0);
+        header_primary_text=(TextView)header.findViewById(R.id.nav_header_text_primary);
+        headerImage=(ImageView) header.findViewById(R.id.nav_header_image);
+        header_primary_text.setText(user.getDisplayName());
+        Glide.with(this).load(user.getPhotoUrl().toString()).into(headerImage);
+Log.d("Image url",user.getPhotoUrl().toString());
+//        HomeFragment homeFragment =  ((HomeFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.fragment_home));
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_container, new HomeFragment());
+            ft.commit();
     }
 
     @Override
@@ -64,6 +106,8 @@ public class DrawerMenuActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
+        moveTaskToBack(true);
     }
 
     @Override
@@ -80,10 +124,6 @@ public class DrawerMenuActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -93,25 +133,27 @@ public class DrawerMenuActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-        if (id == R.id.nav_camera) {
+       if (id == R.id.nav_home) {
 
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_container, new PostsFragment());
-
+            ft.replace(R.id.fragment_container, new HomeFragment());
             ft.commit();
+        } else if (id == R.id.nav_posts) {
 
-        } else if (id == R.id.nav_gallery) {
+           ft.replace(R.id.fragment_container, new PostsFragment());
+           ft.commit();
+        } else if (id == R.id.nav_myposts) {
 
-        } else if (id == R.id.nav_slideshow) {
-
+           ft.replace(R.id.fragment_container, new MyPostsFragment());
+           ft.commit();
         } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+           ft.replace(R.id.fragment_container, new TagsFragment());
+           ft.commit();
+        } else if (id == R.id.nav_signout) {
+            signOut();
+           startActivity(new Intent(this,TwitterLoginActivity.class));
+       }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -121,5 +163,11 @@ public class DrawerMenuActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+
+    private void signOut() {
+        mAuth.signOut();
+        Twitter.logOut();
     }
 }

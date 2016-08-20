@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/add_tag"
+    android:layout_width="500dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
+
+<TextView
+    android:id="@+id/lbl_your_name"
+    android:text="@string/addtag_title_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+<EditText
+    android:id="@+id/txt_your_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:inputType="text"
+    android:imeOptions="actionDone" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/submit_tag_btn"/>
+
+</LinearLayout>
