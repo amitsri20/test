@@ -41,7 +41,7 @@ public class ListProvider implements RemoteViewsFactory {
         this.context = context;
         appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
-
+        Firebase.setAndroidContext(context);
 //        populateListItem();
     }
 
@@ -63,13 +63,13 @@ public class ListProvider implements RemoteViewsFactory {
             ListItem listItem;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                listItem = new ListItem();
+
                 System.out.println("There are " + dataSnapshot.getChildrenCount() + " blog posts");
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     HomeSampleContent post = postSnapshot.getValue(HomeSampleContent.class);
 
-
-                    listItem.setContent("Heading"+post.getHomeContent());
+                    listItem = new ListItem();
+                    listItem.setContent(post.getHomeNotificationText());
                     listItem.setHeading("this is heading");
                     listItemList.add(listItem);
                 }
@@ -103,7 +103,7 @@ public class ListProvider implements RemoteViewsFactory {
         context.getPackageName(), R.layout.list_row);
         ListItem listItem = listItemList.get(position);
         remoteView.setTextViewText(R.id.heading, listItem.getContent());
-        remoteView.setTextViewText(R.id.content, listItem.getHeading());
+//        remoteView.setTextViewText(R.id.content, listItem.getHeading());
 
         return remoteView;
     }
@@ -130,6 +130,7 @@ public class ListProvider implements RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
+
         populateListItem();
     }
 

@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -90,7 +89,7 @@ public class DrawerMenuActivity extends AppCompatActivity
         headerImage=(ImageView) header.findViewById(R.id.nav_header_image);
         header_primary_text.setText(user.getDisplayName());
         Glide.with(this).load(user.getPhotoUrl().toString()).into(headerImage);
-Log.d("Image url",user.getPhotoUrl().toString());
+//        Log.d("Image url",user.getPhotoUrl().toString());
 //        HomeFragment homeFragment =  ((HomeFragment) getSupportFragmentManager()
 //                .findFragmentById(R.id.fragment_home));
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

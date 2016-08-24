@@ -6,21 +6,15 @@ import java.util.HashMap;
  * Created by amit on 7/31/2016.
  */
 public class Tags {
-    private String userid;
     private String tagname;
     private HashMap<String, Object> timestampCreated;
 
     public Tags() {
     }
 
-    public Tags(String userid, String tagname, HashMap<String, Object> timestampCreated) {
-        this.userid = userid;
+    public Tags(String tagname, HashMap<String, Object> timestampCreated) {
         this.tagname = tagname;
         this.timestampCreated = timestampCreated;
-    }
-
-    public String getUserid() {
-        return userid;
     }
 
     public String getTagname() {

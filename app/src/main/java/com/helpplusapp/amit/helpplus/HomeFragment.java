@@ -150,8 +150,8 @@ public class HomeFragment extends Fragment {
                             String UId = mFirebaseUser.getUid();
                             HashMap<String, Object> timestampCreated = new HashMap<>();
                             timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
-                            Tags tags = new Tags(UId, homeSampleContent.getHomeContent(), timestampCreated);
-                            mFirebaseDatabaseReference.child("tags").push().setValue(tags);
+                            Tags tags = new Tags(homeSampleContent.getHomeContent(), timestampCreated);
+                            mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").push().setValue(tags);
                             Toast.makeText(getContext(),homeSampleContent.getHomeContent(),Toast.LENGTH_SHORT).show();
                         }
 

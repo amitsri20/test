@@ -1,14 +1,18 @@
 package com.helpplusapp.amit.helpplus;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.helpplusapp.amit.helpplus.model.Constants;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -60,7 +64,6 @@ public class MyPostsFragment extends ListFragment {
 
 
 
-
 //        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
 // Can also use Twitter directly: Twitter.getApiClient()
 //        SearchService searchService = twitterApiClient.getSearchService();
@@ -91,8 +94,40 @@ public class MyPostsFragment extends ListFragment {
 //        Log.d("User data",mFirebaseUser.getProviderData().get(0).toString());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_posts, container, false);
+//        List proData = mFirebaseUser.getProviderData();
+//        for (Object ui:proData
+//             ) {
+//            Log.d("Twitter Data:",ui.toString());
+//        }
+
+//        if (mFirebaseUser != null) {
+//            for (UserInfo profile : mFirebaseUser.getProviderData()) {
+//                // Id of the provider (ex: google.com)
+//                String providerId = profile.getProviderId();
+//
+//                // UID specific to the provider
+//                String uid = profile.getUid();
+//
+//                // Name, email address, and profile photo Url
+//                String name = profile.getDisplayName();
+//                String email = profile.getEmail();
+//                Uri photoUrl = profile.getPhotoUrl();
+//                Log.d("Twitter details:",name+email+profile.getProviderId());
+//            }
+//        }
+
+//        TwitterSession session = Twitter.getSessionManager().getActiveSession(getActivity());
+//        Log.d("Twitter details:",session.getUserName());
+
+        String screenname="";
+        Context context = getActivity();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                Constants.TWITTER_USERNAME_PREF, Context.MODE_PRIVATE);
+        sharedPref.getString(Constants.TWITTER_USERNAME,screenname);
+
+        Log.d("Screename",screenname);
         final UserTimeline userTimeline = new UserTimeline.Builder()
-                .screenName("helpplusapp")
+                .screenName(screenname)
                 .includeReplies(true)
                 .build();
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(getActivity())

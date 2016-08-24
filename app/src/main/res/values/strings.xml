@@ -70,4 +70,5 @@
     <string name="home_content_input_prefill" />
     <string name="home_content_input_hint">Write content here</string>
     <string name="widget_title">HelpPlus</string>
+    <string name="widget_content">HelpPlus notification</string>
 </resources>

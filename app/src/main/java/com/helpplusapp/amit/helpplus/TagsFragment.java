@@ -104,11 +104,14 @@ public class TagsFragment extends Fragment  {
         mTagsRecyclerView = (RecyclerView) view.findViewById(R.id.tagsRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Tags, TagsViewHolder>(
                 Tags.class,
                 R.layout.item_message,
                 TagsViewHolder.class,
-                mFirebaseDatabaseReference.child("tags")) {
+                mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags")
+
+        ) {
 
             @Override
             protected void populateViewHolder(TagsViewHolder viewHolder, Tags tags, int position) {
@@ -214,8 +217,8 @@ public class TagsFragment extends Fragment  {
                             String UId = mFirebaseUser.getUid();
                             HashMap<String, Object> timestampCreated = new HashMap<>();
                             timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
-                            Tags tags = new Tags(UId,input.toString(),timestampCreated);
-                            mFirebaseDatabaseReference.child("tags").push().setValue(tags);
+                            Tags tags = new Tags(input.toString(),timestampCreated);
+                            mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").push().setValue(tags);
                         }
                     }).show();
         }

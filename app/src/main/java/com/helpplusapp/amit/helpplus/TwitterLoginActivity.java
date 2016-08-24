@@ -1,6 +1,7 @@
 package com.helpplusapp.amit.helpplus;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.helpplusapp.amit.helpplus.model.Constants;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -132,12 +134,12 @@ public class TwitterLoginActivity extends BaseActivity {
     }
 
     // [START auth_with_twitter]
-    private void handleTwitterSession(TwitterSession session) {
+    private void handleTwitterSession(final TwitterSession session) {
         Log.d(TAG, "handleTwitterSession:" + session);
         // [START_EXCLUDE silent]
         showProgressDialog();
         // [END_EXCLUDE]
-
+//            Log.d("Twitter username:",session.getUserName());
         AuthCredential credential = TwitterAuthProvider.getCredential(
                 session.getAuthToken().token,
                 session.getAuthToken().secret);
@@ -157,6 +159,10 @@ public class TwitterLoginActivity extends BaseActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                         else {
+
+                            SharedPreferences.Editor editor = getSharedPreferences(Constants.TWITTER_USERNAME_PREF, MODE_PRIVATE).edit();
+                            editor.putString(Constants.TWITTER_USERNAME, session.getUserName());
+                            editor.apply();
                             startActivity(new Intent(getApplicationContext(),DrawerMenuActivity.class));
                             finish();
                         }
@@ -172,7 +178,6 @@ public class TwitterLoginActivity extends BaseActivity {
     private void signOut() {
         mAuth.signOut();
         Twitter.logOut();
-
         updateUI(null);
     }
 
