@@ -1,5 +1,6 @@
 package com.helpplusapp.amit.helpplus;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -41,21 +42,11 @@ public class HomeFragment extends Fragment {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     public ProgressBar mProgressBar;
+    private TextView mEmptyTextMsg;
     private RecyclerView mHomeNotifRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     FirebaseListAdapter<HomeSampleContent> adapter;
 
-//    public static class HomeNotifViewHolder extends RecyclerView.ViewHolder {
-//        public TextView homeNotifTextView;
-//        public TextView homeNotifTimeCreatedTextView;
-//
-//
-//        public HomeNotifViewHolder(View v) {
-//            super(v);
-//            homeNotifTextView = (TextView) itemView.findViewById(R.id.notifTextView);
-//            homeNotifTimeCreatedTextView = (TextView) itemView.findViewById(R.id.notifTimeCreatedTextView);
-//        }
-//    }
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -86,12 +77,10 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mProgressBar = (ProgressBar)view.findViewById(R.id.progressBar);
-
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         SwipeMenuListView homelist = (SwipeMenuListView)view.findViewById(R.id.home_listview);
         mFirebaseDatabaseReference.child("HomeContent");
-//        Firebase ref = new Firebase("https://helpplusapp-318b8.firebaseio.com/HomeContent");
         DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("HomeContent");
         adapter = new FirebaseListAdapter<HomeSampleContent>(getActivity(), HomeSampleContent.class, R.layout.item_home_message, mDatabaseReference)
         {
@@ -100,7 +89,6 @@ public class HomeFragment extends Fragment {
             protected void populateView(View v, HomeSampleContent model, int position) {
                     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                     ((TextView) v.findViewById(R.id.notifTextView)).setText(model.getHomeNotificationText());
-//                    ((TextView) v.findViewById(R.id.notifTimeCreatedTextView)).setText(model.getTimestampCreated().toString());
 
             }
 
@@ -119,19 +107,22 @@ public class HomeFragment extends Fragment {
                 // create "open" item
                 SwipeMenuItem openItem = new SwipeMenuItem(
                         getContext());
-                // set item background
                 openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
                         0xCE)));
-                // set item width
                 openItem.setWidth(dp2px(90));
-                // set item title
                 openItem.setTitle("Take action");
-                // set item title fontsize
                 openItem.setTitleSize(18);
-                // set item title font color
                 openItem.setTitleColor(Color.WHITE);
-                // add to menu
                 menu.addMenuItem(openItem);
+
+                //share item menu
+                SwipeMenuItem shareItem = new SwipeMenuItem(
+                        getContext());
+                shareItem.setBackground(new ColorDrawable(Color.rgb(30,144,255)));
+                shareItem.setWidth(dp2px(90));
+                shareItem.setIcon(R.drawable.ic_share_white_24dp);
+                menu.addMenuItem(shareItem);
+
 
             }
         };
@@ -152,9 +143,18 @@ public class HomeFragment extends Fragment {
                             timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
                             Tags tags = new Tags(homeSampleContent.getHomeContent(), timestampCreated);
                             mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").push().setValue(tags);
-                            Toast.makeText(getContext(),homeSampleContent.getHomeContent(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),homeSampleContent.getHomeContent() + " added to tags",Toast.LENGTH_SHORT).show();
                         }
-
+                        break;
+                    }
+                    case 1:
+                    {
+                        HomeSampleContent homeSampleContent = adapter.getItem(position);
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, homeSampleContent.getHomeNotificationText());
+                        sendIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.empty_tag_text_msg)));
                         break;
                     }
                     default:

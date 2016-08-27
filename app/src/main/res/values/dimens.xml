@@ -9,5 +9,12 @@
     <dimen name="margin_default">8dp</dimen>
     <dimen name="tag_fragment_margin">0dp</dimen>
     <dimen name="card_content_padding">4dp</dimen>
-
+    <dimen name="empty_widget_textSize">20sp</dimen>
+    <dimen name="add_tag_dialog_width">500dp</dimen>
+    <dimen name="recyclerViewDividerheight">1dp</dimen>
+    <dimen name="card_radius">4dp</dimen>
+    <dimen name="home_card_height">100dp</dimen>
+    <dimen name="widget_content_textSize">18sp</dimen>
+    <dimen name="profile_imagemaxSize">100dp</dimen>
+    <dimen name="widget_layout_height">0dp</dimen>
 </resources>

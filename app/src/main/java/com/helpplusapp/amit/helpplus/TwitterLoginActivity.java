@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -54,7 +55,7 @@ public class TwitterLoginActivity extends BaseActivity {
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(
                 getString(R.string.twitter_consumer_key),
                 getString(R.string.twitter_consumer_secret));
-        Fabric.with(this, new Twitter(authConfig),new TwitterCore(authConfig), new TweetComposer());
+        Fabric.with(this, new Twitter(authConfig), new TwitterCore(authConfig), new TweetComposer(), new Crashlytics());
 
         // Inflate layout (must be done after Twitter is configured)
         setContentView(R.layout.activity_twitter);
