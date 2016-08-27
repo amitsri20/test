@@ -214,7 +214,7 @@ public class TagsFragment extends Fragment  {
                         final TwitterSession session = TwitterCore.getInstance().getSessionManager()
                                     .getActiveSession();
                             TweetComposer.Builder builder = new TweetComposer.Builder(getContext())
-                                    .text(mFirebaseAdapter.getItem(position).getTagname());
+                                    .text(mFirebaseAdapter.getItem(position).getTagname() + " #HelpPlus ");
                             builder.show();
                             Log.d("Item clicked at",Integer.toString(position));
                          }
@@ -256,15 +256,6 @@ public class TagsFragment extends Fragment  {
         return  true;
     }
 
-    private void openTweetWindow(int position, Context context) {
-        initFire();
-        final TwitterSession session = TwitterCore.getInstance().getSessionManager()
-                .getActiveSession();
-        TweetComposer.Builder builder = new TweetComposer.Builder(context)
-                .text(mFirebaseAdapter.getItem(position).getTagname());
-        builder.show();
-        Log.d("Item clicked at",Integer.toString(position));
-    }
 
     private void initFire() {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();

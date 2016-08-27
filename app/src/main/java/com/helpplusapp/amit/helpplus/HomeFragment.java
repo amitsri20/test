@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
@@ -107,8 +105,8 @@ public class HomeFragment extends Fragment {
                 // create "open" item
                 SwipeMenuItem openItem = new SwipeMenuItem(
                         getContext());
-                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                        0xCE)));
+                openItem.setBackground(new ColorDrawable(Color.rgb(190, 190,
+                        190)));
                 openItem.setWidth(dp2px(90));
                 openItem.setTitle("Take action");
                 openItem.setTitleSize(18);
@@ -142,8 +140,14 @@ public class HomeFragment extends Fragment {
                             HashMap<String, Object> timestampCreated = new HashMap<>();
                             timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
                             Tags tags = new Tags(homeSampleContent.getHomeContent(), timestampCreated);
-                            mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").push().setValue(tags);
-                            Toast.makeText(getContext(),homeSampleContent.getHomeContent() + " added to tags",Toast.LENGTH_SHORT).show();
+                            if(mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").equals(tags))
+                            {
+                                Toast.makeText(getContext(),homeSampleContent.getHomeContent() + " is already added to your tags",Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").push().setValue(tags);
+                                Toast.makeText(getContext(), homeSampleContent.getHomeContent() + " added to your tags", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         break;
                     }
@@ -199,25 +203,25 @@ public class HomeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.action_add_home_content)
-        {
-            new MaterialDialog.Builder(getContext())
-                    .title(R.string.add_home_content_title_text)
-                    .content("Home Content")
-                    .inputType(InputType.TYPE_CLASS_TEXT )
-                    .inputRangeRes(5, 160, R.color.tw__composer_red)
-                    .input(R.string.home_content_input_hint, R.string.home_content_input_prefill, new MaterialDialog.InputCallback() {
-                        @Override
-                        public void onInput(MaterialDialog dialog, CharSequence input) {
-//                            String UId = mFirebaseUser.getUid();
-                            HashMap<String, Object> timestampCreated = new HashMap<>();
-                            timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
-//                            String time = ServerValue.TIMESTAMP;
-                            HomeSampleContent homeContent = new HomeSampleContent(input.toString(),input.toString(),"addScreenName",timestampCreated);
-                            mFirebaseDatabaseReference.child("HomeContent").push().setValue(homeContent);
-                        }
-                    }).show();
-        }
+//        if(item.getItemId() == R.id.action_add_home_content)
+//        {
+//            new MaterialDialog.Builder(getContext())
+//                    .title(R.string.add_home_content_title_text)
+//                    .content("Home Content")
+//                    .inputType(InputType.TYPE_CLASS_TEXT )
+//                    .inputRangeRes(5, 160, R.color.tw__composer_red)
+//                    .input(R.string.home_content_input_hint, R.string.home_content_input_prefill, new MaterialDialog.InputCallback() {
+//                        @Override
+//                        public void onInput(MaterialDialog dialog, CharSequence input) {
+////                            String UId = mFirebaseUser.getUid();
+//                            HashMap<String, Object> timestampCreated = new HashMap<>();
+//                            timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
+////                            String time = ServerValue.TIMESTAMP;
+//                            HomeSampleContent homeContent = new HomeSampleContent(input.toString(),input.toString(),"addScreenName",timestampCreated);
+//                            mFirebaseDatabaseReference.child("HomeContent").push().setValue(homeContent);
+//                        }
+//                    }).show();
+//        }
         return  true;
     }
 

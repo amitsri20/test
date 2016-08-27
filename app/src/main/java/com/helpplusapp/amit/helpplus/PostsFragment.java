@@ -78,7 +78,7 @@ public class PostsFragment extends ListFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
-                .query("#google")
+                .query("#HelpPlus")
                 .build();
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(getActivity())
                 .setTimeline(searchTimeline)

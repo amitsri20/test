@@ -66,7 +66,7 @@ public class DrawerMenuActivity extends AppCompatActivity
                 final TwitterSession session = TwitterCore.getInstance().getSessionManager()
                         .getActiveSession();
                 TweetComposer.Builder builder = new TweetComposer.Builder(DrawerMenuActivity.this)
-                        .text("#heplplus");
+                        .text("#heplplus ");
 
                 builder.show();
             }
