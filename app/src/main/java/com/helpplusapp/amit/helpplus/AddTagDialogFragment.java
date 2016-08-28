@@ -12,21 +12,20 @@ import android.widget.EditText;
  */
 public class AddTagDialogFragment extends DialogFragment {
 
-    private EditText mEditText;
 
     public AddTagDialogFragment() {
         // Empty constructor required for DialogFragment
     }
 
     public static AddTagDialogFragment newInstance() {
-        AddTagDialogFragment f = new AddTagDialogFragment();
-        return f;
+//        AddTagDialogFragment f = new AddTagDialogFragment();
+        return new AddTagDialogFragment();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dialog_addtag, container);
-        mEditText = (EditText) view.findViewById(R.id.txt_your_name);
+        EditText mEditText = (EditText) view.findViewById(R.id.txt_your_name);
         getDialog().setTitle("Add tag");
 
         return view;

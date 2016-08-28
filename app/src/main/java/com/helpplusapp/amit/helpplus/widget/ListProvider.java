@@ -46,7 +46,6 @@ public class ListProvider implements RemoteViewsFactory {
 
     private void populateListItem() {
 
-        Firebase ref = new Firebase("https://helpplusapp-318b8.firebaseio.com/HomeContent");
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 

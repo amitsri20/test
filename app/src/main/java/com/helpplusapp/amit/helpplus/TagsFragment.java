@@ -245,7 +245,6 @@ public class TagsFragment extends Fragment  {
                     .input(R.string.tags_input_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
                         @Override
                         public void onInput(MaterialDialog dialog, CharSequence input) {
-                            String UId = mFirebaseUser.getUid();
                             HashMap<String, Object> timestampCreated = new HashMap<>();
                             timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
                             Tags tags = new Tags(input.toString(),timestampCreated);

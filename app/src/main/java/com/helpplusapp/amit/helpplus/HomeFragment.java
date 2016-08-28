@@ -136,18 +136,13 @@ public class HomeFragment extends Fragment {
                         // Decide which action to take
                         HomeSampleContent homeSampleContent = adapter.getItem(position);
                         if (homeSampleContent.getActionType().equals("addScreenName")) {
-                            String UId = mFirebaseUser.getUid();
+//                            String UId = mFirebaseUser.getUid();
                             HashMap<String, Object> timestampCreated = new HashMap<>();
                             timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
                             Tags tags = new Tags(homeSampleContent.getHomeContent(), timestampCreated);
-                            if(mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").equals(tags))
-                            {
-                                Toast.makeText(getContext(),homeSampleContent.getHomeContent() + " is already added to your tags",Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").push().setValue(tags);
-                                Toast.makeText(getContext(), homeSampleContent.getHomeContent() + " added to your tags", Toast.LENGTH_SHORT).show();
-                            }
+
+                            mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").push().setValue(tags);
+                            Toast.makeText(getContext(), homeSampleContent.getHomeContent() + " added to your tags", Toast.LENGTH_SHORT).show();
                         }
                         break;
                     }
