@@ -1,26 +1,55 @@
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/search_tag_hint_text"-->
+        <!--android:id="@+id/search_tags"-->
+        <!--/>-->
+
+<FrameLayout
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/tag_fragment_margin"
     android:layout_marginLeft="@dimen/tag_fragment_margin"
     android:layout_marginEnd="@dimen/tag_fragment_margin"
     android:layout_marginRight="@dimen/tag_fragment_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.helpplusapp.amit.helpplus.TagsFragment">
 
+    <TextView
+        android:id="@+id/recyclerview_tags_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_anchor="@+id/tagsRecyclerView"
+        app:layout_anchorGravity="fill"
+        android:gravity="center_horizontal"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:visibility="gone"
+        android:text="@string/empty_tag_text_msg" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/tagsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
     <ProgressBar
-        style="?android:attr/progressBarStyleSmall"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
         android:layout_gravity="center"
         />
 
-
 </FrameLayout>
+</LinearLayout>

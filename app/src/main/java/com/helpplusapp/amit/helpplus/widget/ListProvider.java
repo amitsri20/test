@@ -42,19 +42,10 @@ public class ListProvider implements RemoteViewsFactory {
         appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
         Firebase.setAndroidContext(context);
-//        populateListItem();
     }
 
     private void populateListItem() {
-//        for (int i = 0; i < 10; i++) {
-//            ListItem listItem = new ListItem();
-//            listItem.heading = "Heading" + i;
-//            listItem.content = i
-//                    + " This is the content of the app widget listview.Nice content though";
-//            listItemList.add(listItem);
-//        }
 
-        Firebase ref = new Firebase("https://helpplusapp-318b8.firebaseio.com/HomeContent");
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
@@ -63,14 +54,14 @@ public class ListProvider implements RemoteViewsFactory {
             ListItem listItem;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                listItemList.clear();
                 System.out.println("There are " + dataSnapshot.getChildrenCount() + " blog posts");
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     HomeSampleContent post = postSnapshot.getValue(HomeSampleContent.class);
 
                     listItem = new ListItem();
-                    listItem.setContent(post.getHomeNotificationText());
-                    listItem.setHeading("this is heading");
+                    listItem.setContent("");
+                    listItem.setHeading(post.getHomeNotificationText());
                     listItemList.add(listItem);
                 }
             }
@@ -102,7 +93,7 @@ public class ListProvider implements RemoteViewsFactory {
         final RemoteViews remoteView = new RemoteViews(
         context.getPackageName(), R.layout.list_row);
         ListItem listItem = listItemList.get(position);
-        remoteView.setTextViewText(R.id.heading, listItem.getContent());
+        remoteView.setTextViewText(R.id.heading, listItem.getHeading());
 //        remoteView.setTextViewText(R.id.content, listItem.getHeading());
 
         return remoteView;

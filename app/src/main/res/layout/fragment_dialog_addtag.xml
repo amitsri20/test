@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/add_tag"
-    android:layout_width="500dp"
+    android:layout_width="@dimen/add_tag_dialog_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
@@ -23,6 +23,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/submit_tag_btn"/>
+        android:id="@+id/submit_tag_btn"
+        android:contentDescription="@string/add_tag_desc"/>
 
 </LinearLayout>

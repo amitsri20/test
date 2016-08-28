@@ -71,4 +71,14 @@
     <string name="home_content_input_hint">Write content here</string>
     <string name="widget_title">HelpPlus</string>
     <string name="widget_content">HelpPlus notification</string>
+    <string name="search_tag_hint_text">Search tags</string>
+    <string name="write_post_desc">Touch here to write a new post</string>
+    <string name="add_tag_desc">Touch submit button to add a new tag to your account</string>
+    <string name="my_post_layout_dssc">Here you will see your posts</string>
+    <string name="no_posts_text">No posts to show</string>
+    <string name="posts_desc">Here you will see posts by you</string>
+    <string name="profile_image_desc">This is your profile image</string>
+    <string name="empty_widget_text">No updates to show, check back later!</string>
+    <string name="empty_tag_text_msg">No items to show, please add new tags by touching + on top right.</string>
+    <string name="empty_home_text_msg">No update to show!</string>
 </resources>

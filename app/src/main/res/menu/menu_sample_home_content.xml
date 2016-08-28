@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_add_home_content"
-        android:title="@string/action_addHomeContent"
-        android:icon="@drawable/ic_add_white_24dp"
-        app:showAsAction="always"/>
+    <!--<item android:id="@+id/action_add_home_content"-->
+        <!--android:title="@string/action_addHomeContent"-->
+        <!--android:icon="@drawable/ic_add_white_24dp"-->
+        <!--app:showAsAction="always"/>-->
 </menu>

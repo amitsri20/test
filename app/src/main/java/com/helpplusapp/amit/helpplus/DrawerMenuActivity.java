@@ -41,10 +41,11 @@ public class DrawerMenuActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Firebase persistance
-        Firebase.setAndroidContext(this);
-        /* Enable disk persistence  */
-        Firebase.getDefaultConfig().setPersistenceEnabled(true);
-
+        if (!(Firebase.getDefaultConfig().isPersistenceEnabled()))
+        {
+            Firebase.getDefaultConfig().setPersistenceEnabled(true);
+            Firebase.setAndroidContext(this);
+        }
         setContentView(R.layout.activity_drawer_menu);
 
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(
@@ -65,7 +66,7 @@ public class DrawerMenuActivity extends AppCompatActivity
                 final TwitterSession session = TwitterCore.getInstance().getSessionManager()
                         .getActiveSession();
                 TweetComposer.Builder builder = new TweetComposer.Builder(DrawerMenuActivity.this)
-                        .text("#heplplus");
+                        .text("#heplplus ");
 
                 builder.show();
             }

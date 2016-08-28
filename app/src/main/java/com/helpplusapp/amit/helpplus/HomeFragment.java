@@ -1,12 +1,12 @@
 package com.helpplusapp.amit.helpplus;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
@@ -41,21 +40,11 @@ public class HomeFragment extends Fragment {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     public ProgressBar mProgressBar;
+    private TextView mEmptyTextMsg;
     private RecyclerView mHomeNotifRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     FirebaseListAdapter<HomeSampleContent> adapter;
 
-//    public static class HomeNotifViewHolder extends RecyclerView.ViewHolder {
-//        public TextView homeNotifTextView;
-//        public TextView homeNotifTimeCreatedTextView;
-//
-//
-//        public HomeNotifViewHolder(View v) {
-//            super(v);
-//            homeNotifTextView = (TextView) itemView.findViewById(R.id.notifTextView);
-//            homeNotifTimeCreatedTextView = (TextView) itemView.findViewById(R.id.notifTimeCreatedTextView);
-//        }
-//    }
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -86,12 +75,10 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mProgressBar = (ProgressBar)view.findViewById(R.id.progressBar);
-
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         SwipeMenuListView homelist = (SwipeMenuListView)view.findViewById(R.id.home_listview);
         mFirebaseDatabaseReference.child("HomeContent");
-//        Firebase ref = new Firebase("https://helpplusapp-318b8.firebaseio.com/HomeContent");
         DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("HomeContent");
         adapter = new FirebaseListAdapter<HomeSampleContent>(getActivity(), HomeSampleContent.class, R.layout.item_home_message, mDatabaseReference)
         {
@@ -100,7 +87,6 @@ public class HomeFragment extends Fragment {
             protected void populateView(View v, HomeSampleContent model, int position) {
                     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                     ((TextView) v.findViewById(R.id.notifTextView)).setText(model.getHomeNotificationText());
-//                    ((TextView) v.findViewById(R.id.notifTimeCreatedTextView)).setText(model.getTimestampCreated().toString());
 
             }
 
@@ -119,19 +105,22 @@ public class HomeFragment extends Fragment {
                 // create "open" item
                 SwipeMenuItem openItem = new SwipeMenuItem(
                         getContext());
-                // set item background
-                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                        0xCE)));
-                // set item width
+                openItem.setBackground(new ColorDrawable(Color.rgb(190, 190,
+                        190)));
                 openItem.setWidth(dp2px(90));
-                // set item title
                 openItem.setTitle("Take action");
-                // set item title fontsize
                 openItem.setTitleSize(18);
-                // set item title font color
                 openItem.setTitleColor(Color.WHITE);
-                // add to menu
                 menu.addMenuItem(openItem);
+
+                //share item menu
+                SwipeMenuItem shareItem = new SwipeMenuItem(
+                        getContext());
+                shareItem.setBackground(new ColorDrawable(Color.rgb(30,144,255)));
+                shareItem.setWidth(dp2px(90));
+                shareItem.setIcon(R.drawable.ic_share_white_24dp);
+                menu.addMenuItem(shareItem);
+
 
             }
         };
@@ -147,14 +136,24 @@ public class HomeFragment extends Fragment {
                         // Decide which action to take
                         HomeSampleContent homeSampleContent = adapter.getItem(position);
                         if (homeSampleContent.getActionType().equals("addScreenName")) {
-                            String UId = mFirebaseUser.getUid();
+//                            String UId = mFirebaseUser.getUid();
                             HashMap<String, Object> timestampCreated = new HashMap<>();
                             timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
                             Tags tags = new Tags(homeSampleContent.getHomeContent(), timestampCreated);
-                            mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").push().setValue(tags);
-                            Toast.makeText(getContext(),homeSampleContent.getHomeContent(),Toast.LENGTH_SHORT).show();
-                        }
 
+                            mFirebaseDatabaseReference.child("users").child(mFirebaseUser.getUid()).child("tags").push().setValue(tags);
+                            Toast.makeText(getContext(), homeSampleContent.getHomeContent() + " added to your tags", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    }
+                    case 1:
+                    {
+                        HomeSampleContent homeSampleContent = adapter.getItem(position);
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, homeSampleContent.getHomeNotificationText());
+                        sendIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.empty_tag_text_msg)));
                         break;
                     }
                     default:
@@ -199,25 +198,25 @@ public class HomeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.action_add_home_content)
-        {
-            new MaterialDialog.Builder(getContext())
-                    .title(R.string.add_home_content_title_text)
-                    .content("Home Content")
-                    .inputType(InputType.TYPE_CLASS_TEXT )
-                    .inputRangeRes(5, 160, R.color.tw__composer_red)
-                    .input(R.string.home_content_input_hint, R.string.home_content_input_prefill, new MaterialDialog.InputCallback() {
-                        @Override
-                        public void onInput(MaterialDialog dialog, CharSequence input) {
-//                            String UId = mFirebaseUser.getUid();
-                            HashMap<String, Object> timestampCreated = new HashMap<>();
-                            timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
-//                            String time = ServerValue.TIMESTAMP;
-                            HomeSampleContent homeContent = new HomeSampleContent(input.toString(),input.toString(),"addScreenName",timestampCreated);
-                            mFirebaseDatabaseReference.child("HomeContent").push().setValue(homeContent);
-                        }
-                    }).show();
-        }
+//        if(item.getItemId() == R.id.action_add_home_content)
+//        {
+//            new MaterialDialog.Builder(getContext())
+//                    .title(R.string.add_home_content_title_text)
+//                    .content("Home Content")
+//                    .inputType(InputType.TYPE_CLASS_TEXT )
+//                    .inputRangeRes(5, 160, R.color.tw__composer_red)
+//                    .input(R.string.home_content_input_hint, R.string.home_content_input_prefill, new MaterialDialog.InputCallback() {
+//                        @Override
+//                        public void onInput(MaterialDialog dialog, CharSequence input) {
+////                            String UId = mFirebaseUser.getUid();
+//                            HashMap<String, Object> timestampCreated = new HashMap<>();
+//                            timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
+////                            String time = ServerValue.TIMESTAMP;
+//                            HomeSampleContent homeContent = new HomeSampleContent(input.toString(),input.toString(),"addScreenName",timestampCreated);
+//                            mFirebaseDatabaseReference.child("HomeContent").push().setValue(homeContent);
+//                        }
+//                    }).show();
+//        }
         return  true;
     }
 

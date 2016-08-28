@@ -10,6 +10,13 @@
         <!--android:layout_height="match_parent"-->
         <!--android:gravity="center_horizontal|center_vertical"-->
         <!--android:text="Home content will go here!"/>-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_home_text_msg"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:id="@android:id/empty"/>
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
@@ -18,11 +25,6 @@
         android:id="@+id/progressBar"
         android:layout_gravity="center"
         />
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/homenotifRecyclerView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--/>-->
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
